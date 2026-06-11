@@ -23,6 +23,8 @@ def get_db_connection(): # Connect to SQLite database
 
 posts_bp = Blueprint('posts', __name__)
 
+
+# HTTP GET REQUEST localhost:5000/post/all
 # Get All Posts
 @posts_bp.route('/all', methods=['GET'])
 @check_authentication # Authentication Middleware
@@ -104,7 +106,7 @@ def createPost():
         # Insert post with the userId from the token
         if data['title'] != "" and data['description'] != "" and data['photo'] != "" and data['location'] != "":
             cursor = conn.execute('''
-                INSERT INTO posts 
+                INSERT INTO posts
                 (userId, title, description, createdAt, photo, location)
                 VALUES (?, ?, ?, ?, ?, ?)
             ''', (
@@ -139,7 +141,7 @@ def get_post_by_title(title):
 
     try:
         post = conn.execute('''
-            SELECT p.*, u.username 
+            SELECT p.*, u.username
             FROM posts p
             JOIN users u ON p.userId = u.id
             WHERE p.title = ?
@@ -262,8 +264,8 @@ def update_post_review(id):
     finally:
         if conn:
             conn.close()
-            
-            
+
+
 @posts_bp.route('/delete/<int:id>', methods=['DELETE'])
 @check_authentication
 def delete_Post(id):
